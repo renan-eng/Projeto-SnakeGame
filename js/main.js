@@ -46,6 +46,16 @@ function update(event){
     if(event.keyCode == 40 && direction != "up") direction = "down";
 }
 
+// função que define o paramêtro de colisão e para o jogo exibe Game Over
+function colision() {
+    for (i = 1; i < snake.length; i++){
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
+            clearInterval(jogo);
+            alert('Game Over')
+        }
+    }
+}
+
 // função que irá inicializar o jogo
 function iniciarJogo(){
     // faz a cobrinha reaparecer na tela caso ela passe dos limtes do canvas
@@ -54,6 +64,7 @@ function iniciarJogo(){
     if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
     if(snake[0].y < 0 && direction == "up") snake[0].y = 16 * box;
     
+    colision();
     
     crairBG();    
     criarCobrinha();
@@ -66,11 +77,16 @@ function iniciarJogo(){
     if(direction == "right") snakeX += box; // a direita soma 1 pixel no sentido de x
     if(direction == "left") snakeX -= box; // a esqueda subtrai 1 pixel (plano cartesiano xy)
     if(direction == "up") snakeY -= box; // para cima subtrai 1 pixel no sentido de y
-    if(direction == "down") snakeY += box; // para baixo soma 1 pixel 
-
-    // retira o ultimo elemento do array Snake
-    snake.pop();
-
+    if(direction == "down") snakeY += box; // para baixo soma 1 pixel
+    
+    //define o crescimento da Snake conforme a posição da comida
+    if (snakeX != food.x || snakeY != food.y){
+        snake.pop(); // retira o ultimo elemento do array Snake
+    }
+    else{ //que a snake esta na posição da comida, entao irá atualizar as coordenadas de X e Y para comida
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
+    }
     let newHead = {
         x: snakeX,
         y: snakeY
