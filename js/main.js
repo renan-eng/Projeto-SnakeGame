@@ -2,6 +2,8 @@ let canvas = document.getElementById('snake'); // snake é o id do meu canvas no
 let contex = canvas.getContext('2d');
 let box = 32; // tamanho de cada pixel na tela
 let snake = [];
+let score=0;
+
 //criando o array da cobria e sua posição inicial
 snake[0] = {
     x: 8 * box,
@@ -27,10 +29,11 @@ function criarCobrinha(){
 }
 
 // cria a comida na cor vermelha em pontos aletórios dentro da nossa canvas
-function drawFood(){
-    contex.fillStyle = "rgb(255, 0, 0)";
-    contex.fillRect(food.x, food.y, box, box);
-}
+function drawFood(){  
+        contex.fillStyle = "rgb(255, 0, 0)";
+        contex.fillRect(food.x, food.y, box, box);     
+    }
+
 
 // puxa do HTML o evento keydown que ocorre quando um tecla é pressioanda e chama a função update
 document.addEventListener('keydown', update); 
@@ -51,13 +54,20 @@ function colision() {
     for (i = 1; i < snake.length; i++){
         if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
             clearInterval(jogo);
-            alert('Game Over')
+            alert('Fim de jogo: obrigado por jogar!');
         }
     }
 }
 
+function drawScore() {
+    contex.font = "20px Arial";
+    contex.fillStyle = "#ffffff";
+    contex.fillText("Placar: "+ score, 8, 20);               
+           
+} 
+
 // função que irá inicializar o jogo
-function iniciarJogo(){
+function iniciarJogo(){    
     // faz a cobrinha reaparecer na tela caso ela passe dos limtes do canvas
     if(snake[0].x > 15 * box && direction == "right") snake[0].x = 0;
     if(snake[0].x < 0 && direction == "left") snake[0].x = 16 * box;
@@ -69,7 +79,8 @@ function iniciarJogo(){
     crairBG();    
     criarCobrinha();
     drawFood();// CORRIGIR: ao adicionar o drawFood() a cobrinha para de se mechar e a comida nao é desenhada na tela
-
+    drawScore();
+    
     // setar posição incial da cobrinha
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -81,19 +92,20 @@ function iniciarJogo(){
     
     //define o crescimento da Snake conforme a posição da comida
     if (snakeX != food.x || snakeY != food.y){
-        snake.pop(); // retira o ultimo elemento do array Snake
+        snake.pop();// retira o ultimo elemento do array Snake
     }
     else{ //que a snake esta na posição da comida, entao irá atualizar as coordenadas de X e Y para comida
         food.x = Math.floor(Math.random() * 15 + 1) * box;
         food.y = Math.floor(Math.random() * 15 + 1) * box;
+        score=score+10;
     }
     let newHead = {
         x: snakeX,
         y: snakeY
     }
 
-    snake.unshift(newHead);
-    
+    snake.unshift(newHead);   
+ 
 }
 // a cada 100ms a função inciarJogo é atualizada permitindo que o jogo rode sem travamento
 let jogo = setInterval(iniciarJogo, 100);
