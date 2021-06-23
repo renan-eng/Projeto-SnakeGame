@@ -8,28 +8,28 @@ snake[0] = {
     y: 8 * box
 }
 let food = {
-    x: Math.floor(Math.random() * 16) * box,
-    y: Math.floor(Math.random() * 16) * box
+    x: Math.floor(Math.random() * 15 + 1) * box,
+    y: Math.floor(Math.random() * 15 + 1) * box
 }
 // criando direção que a cobrinha pode se movimentar
 let direction = "right";
 //cria o fundo de tela do jogo com a cor verde claro com tamanho de 512x512 (16*32)
 function crairBG(){
-    contex.fillStyle = "lightgreen";
-    contex.fillRect(0, 0, 16 * box, 16 * box)
+    contex.fillStyle = "rgb(96, 174, 223)";
+    contex.fillRect(0, 0, 16 * box, 16 * box);
 }
 // cria a cobrinha com a cor verde e posição icial x,y
 function criarCobrinha(){
     for (i = 0; i < snake.length; i++){
-        contex.fillStyle = "green";
+        contex.fillStyle = "rgb(0, 255, 0)";
         contex.fillRect(snake[i].x, snake[i].y, box, box);
     }
 }
 
 // cria a comida na cor vermelha em pontos aletórios dentro da nossa canvas
 function drawFood(){
-    context.fillStyle = "red";
-    context.fillRect(food.x, food.y, box, box);
+    contex.fillStyle = "rgb(255, 0, 0)";
+    contex.fillRect(food.x, food.y, box, box);
 }
 
 // puxa do HTML o evento keydown que ocorre quando um tecla é pressioanda e chama a função update
@@ -54,10 +54,10 @@ function iniciarJogo(){
     if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
     if(snake[0].y < 0 && direction == "up") snake[0].y = 16 * box;
     
-
-    crairBG();
+    
+    crairBG();    
     criarCobrinha();
-    drawFood(); // CORRIGIR: ao adicionar o drawFood() a cobrinha para de se mechar e a comida nao é desenhada na tela
+    drawFood();// CORRIGIR: ao adicionar o drawFood() a cobrinha para de se mechar e a comida nao é desenhada na tela
 
     // setar posição incial da cobrinha
     let snakeX = snake[0].x;
@@ -77,6 +77,7 @@ function iniciarJogo(){
     }
 
     snake.unshift(newHead);
+    
 }
 // a cada 100ms a função inciarJogo é atualizada permitindo que o jogo rode sem travamento
 let jogo = setInterval(iniciarJogo, 100);
